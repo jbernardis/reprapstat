@@ -22,13 +22,13 @@ class Settings:
 		self.port = "8989"
 		self.interval = 60
 		self.autoRefresh = True
+		self.section = "reprapstat"	
 		
 		self.cfg = ConfigParser.ConfigParser()
 		if not self.cfg.read(self.inifile):
 			print("Settings file %s does not exist.  Using default values" % INIFILE)
 			return
 
-		self.section = "reprapstat"	
 		if self.cfg.has_section(self.section):
 			for opt, value in self.cfg.items(self.section):
 				if opt == 'ip':

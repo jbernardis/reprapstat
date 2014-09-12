@@ -19,8 +19,9 @@ LABEL_LAYER = "Layer:"
 LABEL_G_CODE = "G Code:"
 
 class Connection(wx.Frame):
-	def __init__(self, parent, cx):
+	def __init__(self, parent, cx, htrs):
 		self.cx = cx
+		self.htrs = htrs
 		title = "Connection %d" % (cx+1)
 		wx.Frame.__init__(self, parent, wx.ID_ANY, title, (-1, -1), (-1, -1), wx.DEFAULT_FRAME_STYLE & ~(wx.CLOSE_BOX))
 		self.Bind(wx.EVT_CLOSE, self.onClose)
@@ -168,14 +169,19 @@ class Connection(wx.Frame):
 		sizerRight.Add(self.therm['Bed'])
 		sizerRight.AddSpacer((10, 10))
 
-		self.therm['HE0'] = Thermometer(self, "Hot End 0")
-		sizerRight.Add(self.therm['HE0'])
+		k = "temps::connection.%d::temps::temps::HE0" % (self.cx+1)
+		if k in self.htrs:
+			self.therm['HE0'] = Thermometer(self, "Hot End 0")
+			sizerRight.Add(self.therm['HE0'])
+			sizerRight.AddSpacer((10, 10))
+
+		k = "temps::connection.%d::temps::temps::HE1" % (self.cx+1)
+		if k in self.htrs:
+			self.therm['HE1'] = Thermometer(self, "Hot End 1")
+			sizerRight.Add(self.therm['HE1'])
+			sizerRight.AddSpacer((10, 10))
+
 		sizerRight.AddSpacer((10, 10))
-
-		self.therm['HE1'] = Thermometer(self, "Hot End 1")
-		sizerRight.Add(self.therm['HE1'])
-
-		sizerRight.AddSpacer((20, 20))
 		
 		sizerH.Add(sizerRight, 1, wx.EXPAND)
 		sizerH.AddSpacer((20,20))
@@ -249,8 +255,6 @@ class Connection(wx.Frame):
 					v = 0.0
 					
 				self.therm[th].setTemp(v)
-			else:
-				self.therm[th].setTemp(None)
 				
 			k = "temps::connection.%d::temps::targets::%s" % (self.cx+1, th)
 			if k in temp.keys():
@@ -260,6 +264,4 @@ class Connection(wx.Frame):
 					v = 0.0
 					
 				self.therm[th].setTarget(v)
-			else:
-				self.therm[th].setTarget(None)
 

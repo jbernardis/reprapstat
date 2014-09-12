@@ -190,7 +190,7 @@ class MainFrame(wx.Frame):
 			
 		for i in range(nc):
 			if i >= len(self.conn):
-				cn = Connection(self, i)
+				cn = Connection(self, i, t.keys())
 				self.conn.append(cn)
 				cn.Show()
 # 				self.sizer.Add(cn)
