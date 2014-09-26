@@ -16,7 +16,7 @@ class Thermometer(wx.Window):
 		self.target = None
 		self.label = None
 		
-		wx.Window.__init__(self, parent, wx.ID_ANY, size=(800, 500), style=wx.SIMPLE_BORDER)
+		wx.Window.__init__(self, parent, wx.ID_ANY, size=(-1, -1), style=wx.SIMPLE_BORDER)
 		
 		self.dc = wx.WindowDC(self)
 		self.font = wx.Font (24, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
@@ -31,12 +31,17 @@ class Thermometer(wx.Window):
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		rSizer = wx.BoxSizer()
 		
-		t = wx.StaticText(self, wx.ID_ANY, name)		
 		f = wx.Font (24, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
-		t.SetFont(f)
 		self.dc.SetFont(f)
 		s2 = self.dc.GetTextExtent(name)
+		totalHeight = szDig[1] + s2[1]
+		
+		self.SetSize((totalWidth, totalHeight))
+		
+		print s2, szSlash, szDig
 
+		t = wx.StaticText(self, wx.ID_ANY, name)		
+		t.SetFont(f)
 		margin = int((totalWidth - s2[0])/2.0)
 		rSizer.Add(t, 1, wx.LEFT, margin)
 		
@@ -68,7 +73,7 @@ class Thermometer(wx.Window):
 		sizer.Add(rSizer)
 		
 		self.SetSizer(sizer)
-		sizer.Layout()
+#		sizer.Layout()
 		
 	def setTarget(self, newTarget):
 		self.target = newTarget
